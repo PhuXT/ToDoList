@@ -1,6 +1,9 @@
 const bcrypt = require('bcrypt')
 const { userModel } = require('../models/model')
 const { saveUser, LoginRepo } = require('../repository/userRepositoty')
+const jwt = require('jsonwebtoken')
+
+require('dotenv').config()
 
 const registerUserService = async (data) => {
     const saltRound = 10
@@ -19,7 +22,9 @@ const loginService = async (user) => {
     } else {
         let comparePass = await bcrypt.compare(password, userFinding.password)
         if(comparePass) {
-            return { message: 'Login Success', data: 'abc'}
+            const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '86400s'})
+            console.log(accessToken);
+            return { message: 'Login Success', accessToken }
         }
         return { err: 'password is incorrect'}
     }
