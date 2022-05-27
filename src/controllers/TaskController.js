@@ -1,4 +1,4 @@
-const { getAllTaskService, addTaskService, deleteTaskService, editTaskService } = require('../services/taskService')
+const { getAllTaskService, addTaskService, deleteTaskService, editTaskService, updateTaskService } = require('../services/taskService')
 
 // get all task 
 const getAllTask = async (req, res) => {
@@ -25,19 +25,27 @@ const addTask = async (req, res) => {
 
 // delete task
 const deleteTask = async (req, res) => {
-    console.log('Controller');
-    console.log(req.params.taskId, req.body.userId);
-    await deleteTaskService(req.params.taskId, req.body.userId)
+    const data = await deleteTaskService(req.params.taskId, req.body.userId)
+    if(data.message) {
+        return res.status(200).json(data)
+    }
+    return res.status(400).json(data)
 }
 
-// editTask
-const editTask = (req, res) => {
-    
+// updateTask
+const updateTask = async (req, res) => {
+    req.body.taskId = req.params.taskId
+    console.log(req.body);
+    const data = await updateTaskService(req.body)
+    if(data.message) {
+        return res.status(200).json(data)
+    }
+    return res.status(400).json(data)
 }
 
 module.exports = {
     getAllTask,
     addTask,
     deleteTask,
-    editTask
+    updateTask
 }

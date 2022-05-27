@@ -1,5 +1,5 @@
 const res = require('express/lib/response')
-const {getAllTaskRepo, addTaskRepo, deleteTaskRepo, editTaskRepo} = require('../repository/taskRepository')
+const {getAllTaskRepo, addTaskRepo, deleteTaskRepo, updateTaskRepo} = require('../repository/taskRepository')
 
 const getAllTaskService = async (idUSer) =>{
     const data = await getAllTaskRepo(idUSer)
@@ -18,17 +18,16 @@ const addTaskService = async ( objTask ) =>  {
     return data
 }
 
-// editTask Service
-const editTaskService = ( idTask ) => {
-
+// updateTask Service
+const updateTaskService = async ( objUpdate ) => {
+    const data = await updateTaskRepo(objUpdate)
+    return data
 }
 
 // delete Task Service
 const deleteTaskService = async ( taskId, userId ) => {
     const data = await deleteTaskRepo(taskId, userId)
-    if(data.message){
-        res.status(200).json(data)
-    }
+    return data
 }
 
 
@@ -36,6 +35,6 @@ const deleteTaskService = async ( taskId, userId ) => {
 module.exports = {
     getAllTaskService,
     addTaskService,
-    editTaskService,
+    updateTaskService,
     deleteTaskService
 }

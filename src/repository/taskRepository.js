@@ -71,8 +71,20 @@ deleteTaskRepo = async ( taskId, userId ) => {
     }
 }
 
-editTaskRepo = () => {
-
+updateTaskRepo = async (objUpdate) => {
+    // const task = await taskModel.findOne({_id: objUpdate.taskId})
+    // await task.updateOne({})
+    const {taskId, ...newobj} = objUpdate
+    console.log(newobj); 
+    try {
+        await taskModel.findByIdAndUpdate({_id: objUpdate.taskId}, newobj)
+        return {
+            message: 'update sucessully'
+        }
+    } catch (error) {
+        console.log(error);
+    }
+    
 }
 
 
@@ -80,5 +92,5 @@ module.exports = {
     getAllTaskRepo,
     addTaskRepo,
     deleteTaskRepo,
-    editTaskRepo
+    updateTaskRepo
 }
