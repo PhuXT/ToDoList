@@ -23,7 +23,6 @@ const loginService = async (user) => {
         let comparePass = await bcrypt.compare(password, userFinding.password)
         if(comparePass) {
             const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '86400s'})
-            console.log(accessToken);
             return { message: 'Login Success', accessToken }
         }
         return { err: 'password is incorrect'}

@@ -14,7 +14,7 @@ const userSchema = mongoose.Schema( {
 
 
 const taskSchema = mongoose.Schema( {
-    task: { type: String, max: 100, require:  true, unique: true},
+    task: { type: String, max: 100, require:  true},
     description: { type: String, max: 200, require: false},
     isComplete: { type: Boolean, default: false},
     user: {

@@ -1,8 +1,13 @@
 const res = require('express/lib/response')
 const {getAllTaskRepo, addTaskRepo, deleteTaskRepo, updateTaskRepo} = require('../repository/taskRepository')
 
-const getAllTaskService = async (idUSer) =>{
+const getAllTaskService = async (idUSer, email) =>{
     const data = await getAllTaskRepo(idUSer)
+    if(data.email !== email) {
+        return {
+            err: 'you can only get your information'
+        }
+    }
     if(data.message) {
         return {
             message: data.message,
@@ -13,8 +18,9 @@ const getAllTaskService = async (idUSer) =>{
 }
 
 // add Task 
-const addTaskService = async ( objTask ) =>  {
-    const data = await addTaskRepo(objTask) 
+const addTaskService = async ( objTask , email) =>  {
+
+    const data = await addTaskRepo(objTask, email) 
     return data
 }
 
@@ -26,7 +32,7 @@ const updateTaskService = async ( objUpdate ) => {
 
 // delete Task Service
 const deleteTaskService = async ( taskId, userId ) => {
-    const data = await deleteTaskRepo(taskId, userId)
+    const data = await deleteTaskRepo(taskId, userId, email)
     return data
 }
 

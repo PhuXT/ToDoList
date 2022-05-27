@@ -7,11 +7,9 @@ const authenToken = (req, res, next) => {
         })
 
     const token = authorizationHeader.split(' ')[1]
-    console.log(token);
     if(!token) res.status(401).json({
         err: 'access token erro'
     })
-
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, 
         (err, data) => {
             if(err){

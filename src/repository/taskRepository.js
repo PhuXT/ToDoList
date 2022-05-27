@@ -4,7 +4,6 @@ const userModel = require('../models/model').userModel
 const taskModel = require('../models/model').taskModel 
 
 const getAllTaskRepo = async (idUSer) => {
-    console.log(idUSer);
     try {
         let listTask = await userModel.findOne({ _id: idUSer }).populate('tasks')
         return {
@@ -19,19 +18,25 @@ const getAllTaskRepo = async (idUSer) => {
     }
 }
 
-const addTaskRepo = async (objTask) => {
+const addTaskRepo = async (objTask, email) => {
     try {
+        let checkUser = await(userModel).findOne({_id: objTask.user})
+        if(checkUser.email !== email) {
+            return {
+                err: 'You can only add task in your account'
+            }
+        }
         let task = await taskModel(objTask).save()
-        let user = await userModel.findOne({user: task.user})
-        console.log('Task ID');
-        console.log(task._id.toString());
+        let user = await userModel.findOne({_id: task.user})
         let newUser = await user.updateOne( { $push: { tasks: task._id.toString()}})
-        if(newUser){
+
+        if( newUser ){
             return {
                 message: 'Task added',
                 data: task
             }
         }
+
     } catch (error) {
         console.log(error);
         return {
@@ -41,11 +46,15 @@ const addTaskRepo = async (objTask) => {
     }
 }
 
-deleteTaskRepo = async ( taskId, userId ) => {
+deleteTaskRepo = async ( taskId, userId, email ) => {
     try {
         const task = await taskModel.findOne( {_id:taskId})
+        if(checkUser.email !== email) {
+            return {
+                err: 'You can only add task in your account'
+            }
+        }
         const user = await userModel.findOne({_id: userId})
-        console.log(task);
         if(task) {
             if(user.tasks.includes(task._id.toString())){
                 try {
