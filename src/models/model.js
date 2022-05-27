@@ -5,7 +5,7 @@ const userSchema = mongoose.Schema( {
     password: { type: String, max: 50, require: true},
     tasks: [ 
         { 
-            type: mongoose.Schema.Types.ObjectId,
+            type: String,
             ref: "tasks"
         }
     ]
@@ -18,7 +18,7 @@ const taskSchema = mongoose.Schema( {
     description: { type: String, max: 200, require: false},
     isComplete: { type: Boolean, default: false},
     user: {
-        type: mongoose.Schema.Types.ObjectId, 
+        type: String, 
         ref: 'users'
     }
 }, { timestamps:  true})

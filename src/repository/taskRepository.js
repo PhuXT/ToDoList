@@ -1,19 +1,39 @@
+const { editTask } = require('../controllers/TaskController');
+
+const userModel = require('../models/model').userModel 
 const taskModel = require('../models/model').taskModel 
 
 const getAllTaskRepo = async (idUSer) => {
-    let listTask = await taskModel.findOne({ _id: idUSer }).populate
+    console.log(idUSer);
+    try {
+        let listTask = await userModel.findOne({ _id: idUSer }).populate('tasks')
+        return {
+             message: 'success',
+             listTask
+        }
+    } catch (error) {
+        return {
+            err: 'success',
+            error
+        }
+    }
 }
 
 const addTaskRepo = async (objTask) => {
     try {
         let task = await taskModel(objTask).save()
-        if(task){
+        let user = await userModel.findOne({user: task.user})
+        console.log('Task ID');
+        console.log(task._id.toString());
+        let newUser = await user.updateOne( { $push: { tasks: task._id.toString()}})
+        if(newUser){
             return {
                 message: 'Task added',
                 data: task
             }
         }
     } catch (error) {
+        console.log(error);
         return {
             err: 'loi',
             data: error
@@ -21,7 +41,44 @@ const addTaskRepo = async (objTask) => {
     }
 }
 
+deleteTaskRepo = async ( taskId, userId ) => {
+    try {
+        const task = await taskModel.findOne( {_id:taskId})
+        const user = await userModel.findOne({_id: userId})
+        console.log(task);
+        if(task) {
+            if(user.tasks.includes(task._id.toString())){
+                try {
+                    await taskModel.deleteOne({_id: taskId})
+                    await user.updateOne( {$pull : {tasks: taskId }} )
+                    console.log('Task Deleted');
+                    return {
+                        message: 'Deleted',
+                    }
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+            return {
+                err: 'You can delete only your task!'
+            }
+        }
+        return {
+            err: 'Task is not exitst'
+        }
+    } catch (error) {
+        
+    }
+}
+
+editTaskRepo = () => {
+
+}
+
+
 module.exports = {
     getAllTaskRepo,
-    addTaskRepo
+    addTaskRepo,
+    deleteTaskRepo,
+    editTaskRepo
 }
