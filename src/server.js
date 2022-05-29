@@ -1,19 +1,21 @@
 require('dotenv').config();
 
-const express = require('express')
-const conectDB = require('./config/db')
-const initialWebRouter = require('./routes/index')
-const morgan = require('morgan')
-
+const express = require('express');
 const app = express();
-app.use(express.urlencoded({extended: true}))
-app.use(express.json())
-app.use(morgan('combined'))
+const conectDB = require('./config/db');
+const initialWebRouter = require('./routes/index.routes');
+const morgan = require('morgan');
 
-conectDB()
-initialWebRouter(app)
-let port = process.env.PORT || 5000;
+// middleware
+app.use(express.urlencoded({extended: true}));
+app.use(express.json());
+app.use(morgan('combined'));
+
+conectDB();
+
+initialWebRouter(app);
+const port = process.env.PORT || 5000;
 
 app.listen(port, () => {
-    console.log('Server start: ' + port );
+    console.log('Server start on port: ' + port);
 });
