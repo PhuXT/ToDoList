@@ -9,7 +9,7 @@ const jwt = require('jsonwebtoken');
 // GET ALL TASK
 const getAllTask = async (req, res) => {
     const data = await getAllTaskService(
-        req.params.userID,
+        // req.params.userID,
         req.headers.authorization,
     );
     return res.status(data.statusCode).json(data.data);
@@ -17,22 +17,18 @@ const getAllTask = async (req, res) => {
 
 // CREATE TASK
 const createTask = async (req, res) => {
-    const data = await createTaskService(
-        req.body,
-        req.params.userID,
-        req.headers.authorization,
-    );
+    const data = await createTaskService(req.body, req.headers.authorization);
     return res.status(data.statusCode).json(data.data);
 };
 
 // DELETE TASK
 const deleteTask = async (req, res) => {
     const data = await deleteTaskService(
-        req.params.userID,
+        // req.params.userID,
         req.params.taskID,
         req.headers.authorization,
     );
-    return res.status(400).json(data);
+    return res.status(data.statusCode).json(data.data);
 };
 
 // UPDATE

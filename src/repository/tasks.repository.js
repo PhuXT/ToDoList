@@ -4,13 +4,11 @@ const taskModel = require('../models/model').taskModel;
 
 const getAllTaskRepo = async (userID) => {
     try {
-        const listTask = await userModel
-            .findOne({_id: userID})
-            .populate('tasks');
-        if (!listTask) {
-            return repoRespone(404, 'Task not found', listTask);
+        const user = await userModel.findOne({_id: userID}).populate('tasks');
+        if (!user) {
+            return repoRespone(404, 'User not found', user);
         }
-        return repoRespone(200, 'success', listTask);
+        return repoRespone(200, 'success', user);
     } catch (error) {
         return repoRespone(503, 'Service Unavailable', error);
     }
@@ -73,7 +71,6 @@ updateTaskRepo = async (userID, taskID, taskUpdate) => {
         if (task.user !== userID) {
             return repoRespone(401, 'You can only update your task');
         }
-        // await taskModel.updateOne({_id: taskID}, taskUpdate);
         await task.updateOne(taskUpdate);
         return repoRespone(200, 'update success');
     } catch (error) {
