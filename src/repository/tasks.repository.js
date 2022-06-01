@@ -59,7 +59,7 @@ deleteTaskRepo = async (userID, taskID) => {
         await user.updateOne({$pull: {tasks: taskID}});
         return repoRespone(200, 'deleted');
     } catch (error) {
-        return repoRespone(503, 'Service hhh unavailable', error);
+        return repoRespone(503, 'Service unavailable', error);
     }
 };
 

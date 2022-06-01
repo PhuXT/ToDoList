@@ -9,7 +9,6 @@ const {
 
 route.post('/:userID', createTask);
 route.get('/all', getAllTask);
-// route.delete('/:userID/:taskID', deleteTask);
 route.delete('/:taskID', deleteTask);
 route.put('/:taskID', updateTask);
 
